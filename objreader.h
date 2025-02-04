@@ -3,27 +3,15 @@
 
 #include <QTextStream>
 #include <QFile>
-#include <QTest>
 #include "mesh.h"
 
 
 namespace ObjReader
 {
     QString readObj(const QString &pathToFile,  Mesh &mesh);
-    QString parseToVertex(const QStringList &strl, QVector3D &vertex, QString &errorMassage);
-    QString parseToTextureVertex(const QStringList &strl, QVector2D &textureVertex, QString &errorMassage);
-    QString parseToFace(const QStringList &strl, QVector<int> &verticesIndex, QVector<int> &textureVerticesIndex, QString &errorMassage);
-
-    class ObjReaderTest : public QObject
-    {
-        Q_OBJECT
-
-    public:
-        ObjReaderTest() = default;
-
-    private slots:
-        void testParseVertex();
-    };
+    QString parseVertex(const QStringList &chars, QVector3D &vertex, QString &errorMassage);
+    QString parseTextureVertex(const QStringList &chars, QVector2D &textureVertex, QString &errorMassage);
+    QString parseFace(const QStringList &chars, QVector<int> &verticesIndeces, QVector<int> &textureVerticesIndeces, QVector<int> &normalIndeces, QString &errorMessage);
 };
 
 #endif // OBJREADER_H

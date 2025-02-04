@@ -11,7 +11,8 @@ CONFIG -= app_bundle
 SOURCES += \
         main.cpp \
         mesh.cpp \
-        objreader.cpp
+        objreader.cpp \
+        objreadertest.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -20,7 +21,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     mesh.h \
-    objreader.h
+    objreader.h \
+    objreadertest.h
 
 DISTFILES += \
     modelexp.txt
