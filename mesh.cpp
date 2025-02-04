@@ -1,26 +1,5 @@
 #include "mesh.h"
 
-Mesh::Mesh()
-{
-
-}
-
-void Mesh::addVertex(QVector3D verticeCoord)
-{
-    vertices.append(verticeCoord);
-}
-
-void Mesh::addTextureVertex(QVector2D verticeTextureCoord)
-{
-    textureVertices.append(verticeTextureCoord);
-}
-
-void Mesh::addFace(QVector<int> face)
-{
-    faceVerticesIndeces.append(face);
-}
-
-void Mesh::addTextureFace(QVector<int> textureFace)
-{
-    textureFaceVerticesIndeces.append(textureFace);
+Mesh::Mesh(QVector<QVector3D> vertices, QVector<QVector2D> textureVertices, QVector<QVector<int>> faceVerticesIndeces, QVector<QVector<int>> textureFaceVerticesIndeces) :
+    m_vertices(vertices), m_textureVertices(textureVertices), m_faceVerticesIndeces(faceVerticesIndeces), m_textureFaceVerticesIndeces(textureFaceVerticesIndeces) {
 }

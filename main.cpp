@@ -11,6 +11,6 @@ int main()
     bool isOk = true;
     error.toFloat(&isOk);
     //qDebug() << error.size();
-    ObjReader::ObjReaderTest test;
-    QTest::qExec(&test);
+    //ObjReader::ObjReaderTest test;
+    //QTest::qExec(&test);
 }

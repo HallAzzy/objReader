@@ -4,22 +4,18 @@
 #include <QVector>
 #include <QVector2D>
 #include <QVector3D>
-#include <QString>
 
 class Mesh
 {
 public:
-    Mesh();
-    void addVertex(QVector3D verticeCoord);
-    void addTextureVertex(QVector2D verticeTextureCoord);
-    void addFace(QVector<int>);
-    void addTextureFace(QVector<int>);
+    Mesh() = default;
+    Mesh(QVector<QVector3D> vertices, QVector<QVector2D> textureVertices, QVector<QVector<int>> faceVerticesIndeces, QVector<QVector<int>> textureFaceVerticesIndeces);
 
 private:
-    QVector<QVector3D> vertices;
-    QVector<QVector2D> textureVertices;
-    QVector<QVector<int>> faceVerticesIndeces;
-    QVector<QVector<int>>  textureFaceVerticesIndeces;
+    QVector<QVector3D> m_vertices;
+    QVector<QVector2D> m_textureVertices;
+    QVector<QVector<int>> m_faceVerticesIndeces;
+    QVector<QVector<int>> m_textureFaceVerticesIndeces;
 };
 
 #endif // MESH_H

@@ -9,17 +9,17 @@
 
 namespace ObjReader
 {
-    QString ObjReader(const QString &pathToFile,  Mesh &mesh);
-    bool parseToVertex(const QStringList &strl, QVector3D &vertex, QString &errorMassage);
-    bool parseToTextureVertex(const QStringList &strl, QVector2D &textureVertex, QString &errorMassage);
-    bool parseToFace(const QStringList &strl, QVector<int> &verticesIndex, QVector<int> &textureVerticesIndex, QString &errorMassage);
+    QString readObj(const QString &pathToFile,  Mesh &mesh);
+    QString parseToVertex(const QStringList &strl, QVector3D &vertex, QString &errorMassage);
+    QString parseToTextureVertex(const QStringList &strl, QVector2D &textureVertex, QString &errorMassage);
+    QString parseToFace(const QStringList &strl, QVector<int> &verticesIndex, QVector<int> &textureVerticesIndex, QString &errorMassage);
 
     class ObjReaderTest : public QObject
     {
         Q_OBJECT
 
     public:
-        ObjReaderTest();
+        ObjReaderTest() = default;
 
     private slots:
         void testParseVertex();
