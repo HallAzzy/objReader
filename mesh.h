@@ -5,26 +5,34 @@
 #include <QVector2D>
 #include <QVector3D>
 
-class Mesh
-{
-public:
-    Mesh() = default;
-    Mesh(QVector<QVector3D> vertices, QVector<QVector2D> textureVertices, QVector<QVector<int>> faceVerticesIndeces, QVector<QVector<int>> textureFaceVerticesIndeces);
+//! REVIEW: namespace
 
-    QVector<QVector3D> getVertices();
-    QVector<QVector2D> getTextureVertices();
-    QVector<QVector<int>> getFaceVerticesIndeces();
-    QVector<QVector<int>> getTextureFaceVerticesIndeces();
-    QVector<QVector3D> calcBoundBox();
+namespace MyMesh {
+    class Mesh
+    {
+    public:
+        Mesh() = default;
+        Mesh(const QVector<QVector3D> &vertices, const QVector<QVector2D> &textureVertices, const QVector<QVector<int>> &faceVerticesIndeces, const QVector<QVector<int>> &textureFaceVerticesIndeces);
 
-private:
-    QVector<QVector3D> m_vertices;
-    QVector<QVector2D> m_textureVertices;
-    QVector<QVector3D> m_normals;
-    QVector<QVector<int>> m_faceVerticesIndeces;
-    QVector<QVector<int>> m_textureFaceVerticesIndeces;
-    QVector<QVector<int>> m_normalIndeces;
-    QVector<QVector3D> boundingBox;
-};
+        const QVector<QVector3D> &getVertices();
+        const QVector<QVector2D> &getTextureVertices();
+        const QVector<QVector<int>> &getFaceVerticesIndeces();
+        const QVector<QVector<int>> &getTextureFaceVerticesIndeces();
+        const QVector<QVector<int>> &getGroupIndeces();
+        const QVector<QString> &getGroups();
+        QVector<QVector3D> calcBoundBox();
+
+    private:
+        QVector<QVector3D> m_vertices;
+        QVector<QVector2D> m_textureVertices;
+        QVector<QVector3D> m_normals;
+        QVector<QVector<int>> m_faceVerticesIndeces;
+        QVector<QVector<int>> m_textureFaceVerticesIndeces;
+        QVector<QVector<int>> m_normalIndeces;
+        QVector<int> m_groups;
+        QVector<QString> m_groupNames;
+    };
+}
+
 
 #endif // MESH_H

@@ -21,25 +21,25 @@ void ObjReaderTest::testParseVertex()
     QCOMPARE(vertex, QVector3D(1234, -1023, 0));
 
     parseVertex({"v", "t", "2", "3"}, vertex, errorMessage);
-    QCOMPARE(errorMessage, "Invalid vertex coordinate t");
+    QCOMPARE(errorMessage, "Invalid vertex coordinate t: ");
 
     parseVertex({"v", "1", "tt", "3"}, vertex, errorMessage);
-    QCOMPARE(errorMessage, "Invalid vertex coordinate tt");
+    QCOMPARE(errorMessage, "Invalid vertex coordinate tt: ");
 
     parseVertex({"v", "1", "2", "ttt"}, vertex, errorMessage);
-    QCOMPARE(errorMessage, "Invalid vertex coordinate ttt");
+    QCOMPARE(errorMessage, "Invalid vertex coordinate ttt: ");
 
     parseVertex({}, vertex, errorMessage);
-    QCOMPARE(errorMessage, "Invalid amount of coordinates in line");
+    QCOMPARE(errorMessage, "Invalid amount of coordinates in line: ");
 
     parseVertex({"v"}, vertex, errorMessage);
-    QCOMPARE(errorMessage, "Invalid amount of coordinates in line");
+    QCOMPARE(errorMessage, "Invalid amount of coordinates in line: ");
 
     parseVertex({"v", "1"}, vertex, errorMessage);
-    QCOMPARE(errorMessage, "Invalid amount of coordinates in line");
+    QCOMPARE(errorMessage, "Invalid amount of coordinates in line: ");
 
     parseVertex({"v", "1", "3"}, vertex, errorMessage);
-    QCOMPARE(errorMessage, "Invalid amount of coordinates in line");
+    QCOMPARE(errorMessage, "Invalid amount of coordinates in line: ");
 }
 
 void ObjReaderTest::testParseTexture()
@@ -60,19 +60,19 @@ void ObjReaderTest::testParseTexture()
     QCOMPARE(textureVertex, QVector2D(-1023, 0));
 
     parseTextureVertex({"vt", "t", "2"}, textureVertex, errorMessage);
-    QCOMPARE(errorMessage, "Invalid texture vertex coordinate t");
+    QCOMPARE(errorMessage, "Invalid texture vertex coordinate t: ");
 
     parseTextureVertex({"vt", "1", "tt"}, textureVertex, errorMessage);
-    QCOMPARE(errorMessage, "Invalid texture vertex coordinate tt");
+    QCOMPARE(errorMessage, "Invalid texture vertex coordinate tt: ");
 
     parseTextureVertex({}, textureVertex, errorMessage);
-    QCOMPARE(errorMessage, "Invalid amount of coordinates in line");
+    QCOMPARE(errorMessage, "Invalid amount of coordinates in line: ");
 
     parseTextureVertex({"vt"}, textureVertex, errorMessage);
-    QCOMPARE(errorMessage, "Invalid amount of coordinates in line");
+    QCOMPARE(errorMessage, "Invalid amount of coordinates in line: ");
 
     parseTextureVertex({"vt", "1"}, textureVertex, errorMessage);
-    QCOMPARE(errorMessage, "Invalid amount of coordinates in line");
+    QCOMPARE(errorMessage, "Invalid amount of coordinates in line: ");
 }
 
 void ObjReaderTest::testParseFaceVertexOnly()
@@ -144,7 +144,11 @@ void ObjReaderTest::testParseAmount()
     QString errorMessage;
 
     parseFace({"f", "1/4/7", "2/5/8"}, verticesIndeces, textureIndeces, normalIndeces, errorMessage);
-    QCOMPARE(errorMessage, "Invalid amount of coordinates in polygone");
+    QCOMPARE(errorMessage, "Invalid amount of coordinates in polygone: ");
+}
+
+void ObjReaderTest::testreadObj(){
+
 }
 
 } // namespace ObjReader

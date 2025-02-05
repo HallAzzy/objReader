@@ -21,6 +21,7 @@ private slots:
     void testParseFaceFull();
     void testParseAmount();
     void testParseFaceFullAnother();
+    void testreadObj();
 };
 
 } // namespace ObjReader

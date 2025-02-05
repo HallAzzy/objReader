@@ -6,12 +6,12 @@
 #include "mesh.h"
 
 
-namespace ObjReader
-{
-    QString readObj(const QString &pathToFile,  Mesh &mesh);
-    QString parseVertex(const QStringList &chars, QVector3D &vertex, QString &errorMassage);
-    QString parseTextureVertex(const QStringList &chars, QVector2D &textureVertex, QString &errorMassage);
-    QString parseFace(const QStringList &chars, QVector<int> &verticesIndeces, QVector<int> &textureVerticesIndeces, QVector<int> &normalIndeces, QString &errorMessage);
+namespace ObjReader {
+    QString readObj(const QTextStream &text, MyMesh::Mesh &mesh);
+    QString readObj(const QString &pathToFile, MyMesh::Mesh &mesh);
+    void parseVertex(const QStringList &chars, QVector3D &vertex, QString &errorMassage);
+    void parseTextureVertex(const QStringList &chars, QVector2D &textureVertex, QString &errorMassage);
+    void parseFace(const QStringList &chars, QVector<int> &verticesIndeces, QVector<int> &textureVerticesIndeces, QVector<int> &normalIndeces, QString &errorMessage);
 };
 
 #endif // OBJREADER_H

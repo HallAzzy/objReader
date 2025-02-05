@@ -7,10 +7,10 @@ int main()
 {
     QVector3D vertex;
     QStringList lst = {"v", "5", "2", "2"};
-    QString error;
+    QString error = "Line ";
     ObjReader::parseVertex(lst, vertex, error);
     bool isOk = true;
-    error.toFloat(&isOk);
+
     ObjReader::ObjReaderTest test;
     QTest::qExec(&test);
 }

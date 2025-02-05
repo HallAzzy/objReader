@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 6.0.1, 2025-02-03T18:34:45. -->
+<!-- Written by QtCreator 6.0.1, 2025-02-04T18:30:48. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -67,7 +67,17 @@
     <value type="bool" key="AutoTest.Framework.QtQuickTest">true</value>
     <value type="bool" key="AutoTest.Framework.QtTest">true</value>
    </valuemap>
-   <valuemap type="QVariantMap" key="AutoTest.CheckStates"/>
+   <valuemap type="QVariantMap" key="AutoTest.CheckStates">
+    <value type="Qt::CheckState" key="1@/home/anton/untitled/objreadertest.cpp:testParseAmount">Checked</value>
+    <value type="Qt::CheckState" key="1@/home/anton/untitled/objreadertest.cpp:testParseFaceFull">Checked</value>
+    <value type="Qt::CheckState" key="1@/home/anton/untitled/objreadertest.cpp:testParseFaceFullAnother">Checked</value>
+    <value type="Qt::CheckState" key="1@/home/anton/untitled/objreadertest.cpp:testParseFaceVertexNormal">Checked</value>
+    <value type="Qt::CheckState" key="1@/home/anton/untitled/objreadertest.cpp:testParseFaceVertexOnly">Checked</value>
+    <value type="Qt::CheckState" key="1@/home/anton/untitled/objreadertest.cpp:testParseFaceVertexTexture">Checked</value>
+    <value type="Qt::CheckState" key="1@/home/anton/untitled/objreadertest.cpp:testParseTexture">Checked</value>
+    <value type="Qt::CheckState" key="1@/home/anton/untitled/objreadertest.cpp:testParseVertex">Checked</value>
+    <value type="Qt::CheckState" key="1@/home/anton/untitled/objreadertest.h:ObjReader::ObjReaderTest">Checked</value>
+   </valuemap>
    <value type="int" key="AutoTest.RunAfterBuild">0</value>
    <value type="bool" key="AutoTest.UseGlobal">true</value>
    <valuelist type="QVariantList" key="ClangCodeModel.CustomCommandLineKey"/>
