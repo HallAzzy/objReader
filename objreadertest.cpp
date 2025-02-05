@@ -1,7 +1,7 @@
 #include "objreadertest.h"
 #include "objreader.h"
 
-namespace ObjReader {
+namespace ObjReader::Tests {
 
 void ObjReaderTest::testParseVertex()
 {
@@ -147,8 +147,97 @@ void ObjReaderTest::testParseAmount()
     QCOMPARE(errorMessage, "Invalid amount of coordinates in polygone: ");
 }
 
-void ObjReaderTest::testreadObj(){
-
+void ObjReaderTest::testReadObj()
+{
+    QString str = "v 1 2 3\n"
+                  "v 2 3 4\n"
+                  "v 2 6 5\n"
+                  "vt 1 2\n"
+                  "vt 3 4\n"
+                  "vt 8 3\n"
+                  "vn 0.1 0.5 0.2\n"
+                  "vn 0.2 0.6 0.3\n"
+                  "vn 0.6 0.3 0.9\n"
+                  "f 1/1/1 2/2/2 3/3/3\n";
+    QTextStream stream(&str);
+    MyMesh::Mesh m;
+    MyMesh::Mesh mComp({{1, 2, 3}, {2, 3, 4}, {2, 6, 5}}, {{1, 2}, {3, 4}, {8, 3}}, {{0.1, 0.5, 0.2}, {0.2, 0.6, 0.3}, {0.6, 0.3, 0.9}}, {{1, 2, 3}}, {{1, 2, 3}}, {{1, 2, 3}}, {-1}, {});
+    readObj(stream, m);
+    QCOMPARE(m, mComp);
 }
 
+void ObjReaderTest::testReadObjAnother()
+{
+    QString str = "v 1 2 3\n"
+                  "v 2 3 4\n"
+                  "v 2 6 5\n"
+                  "vt 1 2\n"
+                  "vt 3 4\n"
+                  "vt 8 3\n"
+                  "vn 0.1 0.5 0.2\n"
+                  "vn 0.2 0.6 0.3\n"
+                  "vn 0.6 0.3 0.9\n"
+                  "g point\n"
+                  "f 1/1/1 2/2/2 3/3/3\n";
+    QTextStream stream(&str);
+    MyMesh::Mesh m;
+    MyMesh::Mesh mComp({{1, 2, 3}, {2, 3, 4}, {2, 6, 5}}, {{1, 2}, {3, 4}, {8, 3}}, {{0.1, 0.5, 0.2}, {0.2, 0.6, 0.3}, {0.6, 0.3, 0.9}}, {{1, 2, 3}}, {{1, 2, 3}}, {{1, 2, 3}}, {0}, {"point"});
+    readObj(stream, m);
+    QCOMPARE(m, mComp);
+}
+
+void ObjReaderTest::testReadFile()
+{
+    QString filePath = "/home/anton/untitled/modelexp.txt";
+        MyMesh::Mesh m;
+        MyMesh::Mesh mComp(
+           {{1.000000, 1.000000, -1.000000},
+            {1.000000, -1.000000, -1.000000},
+            {-1.000000, -1.000000, -1.000000},
+            {-1.000000, 1.000000, -1.000000},
+            {1.000000, 1.000000, 1.000000},
+            {1.000000, -1.000000, 1.000000},
+            {-1.000000, -1.000000, 1.000000},
+            {-1.000000, 1.000000, 1.000000}},
+
+           {{0.000000, 0.000000},
+            {1.000000, 0.000000},
+            {1.000000, 1.000000},
+            {0.000000, 1.000000}},
+
+           {{0.000000, 0.000000, -1.000000},
+            {0.000000, 0.000000, 1.000000},
+            {1.000000, 0.000000, 0.000000},
+            {-1.000000, 0.000000, 0.000000},
+            {0.000000, 1.000000, 0.000000},
+            {0.000000, -1.000000, 0.000000}},
+
+           {{1, 2, 3, 4},
+            {5, 6, 7, 8},
+            {1, 5, 6, 2},
+            {4, 8, 7, 3},
+            {1, 4, 8, 5},
+            {2, 3, 7, 6}},
+
+           {{1, 2, 3, 4},
+            {1, 2, 3, 4},
+            {1, 2, 3, 4},
+            {1, 2, 3, 4},
+            {1, 2, 3, 4},
+            {1, 2, 3, 4}},
+
+            {{1, 1, 1, 1},
+            {2, 2, 2, 2},
+            {3, 3, 3, 3},
+            {4, 4, 4, 4},
+            {5, 5, 5, 5},
+            {6, 6, 6, 6}},
+
+            {0, 0, 0, 0, 0, 0},
+
+            {"cube"});
+
+        readObj(filePath, m);
+        QCOMPARE(m, mComp);
+}
 } // namespace ObjReader

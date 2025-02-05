@@ -9,8 +9,7 @@ int main()
     QStringList lst = {"v", "5", "2", "2"};
     QString error = "Line ";
     ObjReader::parseVertex(lst, vertex, error);
-    bool isOk = true;
 
-    ObjReader::ObjReaderTest test;
+    ObjReader::Tests::ObjReaderTest test;
     QTest::qExec(&test);
 }

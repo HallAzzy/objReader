@@ -1,7 +1,11 @@
 #include "mesh.h"
 
-MyMesh::Mesh::Mesh(const QVector<QVector3D> &vertices, const QVector<QVector2D> &textureVertices, const QVector<QVector<int>> &faceVerticesIndeces, const QVector<QVector<int>> &textureFaceVerticesIndeces) :
-    m_vertices(vertices), m_textureVertices(textureVertices), m_faceVerticesIndeces(faceVerticesIndeces), m_textureFaceVerticesIndeces(textureFaceVerticesIndeces) {
+MyMesh::Mesh::Mesh(const QVector<QVector3D> &vertices, const QVector<QVector2D> &textureVertices, const QVector<QVector3D> &normals,
+                   const QVector<QVector<int>> &faceVerticesIndeces, const QVector<QVector<int>> &textureFaceVerticesIndeces,
+                   const QVector<QVector<int>> &normalIndeces, const QVector<int> &groups, const QVector<QString> &groupNames) :
+    m_vertices(vertices), m_textureVertices(textureVertices), m_normals(normals), m_faceVerticesIndeces(faceVerticesIndeces),
+    m_textureFaceVerticesIndeces(textureFaceVerticesIndeces), m_normalIndeces(normalIndeces), m_groups(groups), m_groupNames(groupNames)
+{
 }
 
 const QVector<QVector3D> &MyMesh::Mesh::Mesh::getVertices()
@@ -62,3 +66,14 @@ QVector<QVector3D> MyMesh::Mesh::calcBoundBox()
 
     return boundingBox;
 }
+
+bool MyMesh::Mesh::operator==(const Mesh& other) const {
+     return (m_vertices == other.m_vertices &&
+            m_textureVertices == other.m_textureVertices &&
+            m_normals == other.m_normals &&
+            m_faceVerticesIndeces == other.m_faceVerticesIndeces &&
+            m_textureFaceVerticesIndeces == other.m_textureFaceVerticesIndeces &&
+            m_normalIndeces == other.m_normalIndeces &&
+            m_groups == other.m_groups &&
+            m_groupNames == other.m_groupNames);
+ }

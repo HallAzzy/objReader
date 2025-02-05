@@ -3,23 +3,14 @@
 
 using namespace MyMesh;
 
-QString ObjReader::readObj(const QTextStream &text, Mesh &mesh) {
-
-}
-
-QString ObjReader::readObj(const QString &pathToFile, Mesh &mesh)
-{        
-    QFile file(pathToFile);
-    if (!file.open(QFile::ReadOnly)) {
-        return "Cannot open the file!";
-    }
-    QTextStream stream(&file);
+QString ObjReader::readObj(QTextStream &stream, Mesh &mesh)
+{
     QVector<QVector3D> vertices;
     QVector<QVector2D> textureVertices;
     QVector<QVector3D> normals;
-    QVector<QVector<int>> faceVerticesIndeces;
-    QVector<QVector<int>> textureFaceVerticesIndeces;
-    QVector<QVector<int>> normalIndeces;
+    QVector<QVector<int>> faceVerticesIndices;
+    QVector<QVector<int>> textureFaceVerticesIndices;
+    QVector<QVector<int>> normalIndices;
     QVector<int> groups;
     QVector<QString> groupNames;
     QString currentGroup;
@@ -62,13 +53,14 @@ QString ObjReader::readObj(const QString &pathToFile, Mesh &mesh)
             parseFace(parts, vertexIndex, textureVertexIndex, normalIndex, errorMessage);
             if (!errorMessage.isEmpty())
                 return errorMessage + line;
-            faceVerticesIndeces.append(vertexIndex);
-            textureFaceVerticesIndeces.append(textureVertexIndex);
-            normalIndeces.append(normalIndex);
+            faceVerticesIndices.append(vertexIndex);
+            textureFaceVerticesIndices.append(textureVertexIndex);
+            normalIndices.append(normalIndex);
+            groups.append(-1);
             if (hasActiveGroup) {
                 groups[faceIndex] = groupNames.indexOf(currentGroup);
             }
-            faceIndex++;
+            ++faceIndex;
         }
         if (token == "g") {
             currentGroup = parts[1];
@@ -76,9 +68,18 @@ QString ObjReader::readObj(const QString &pathToFile, Mesh &mesh)
             hasActiveGroup = true;
         }
     }
-    file.close();
-    mesh = Mesh(vertices, textureVertices, faceVerticesIndeces, textureFaceVerticesIndeces);
+    mesh = Mesh(vertices, textureVertices, normals, faceVerticesIndices, textureFaceVerticesIndices, normalIndices, groups, groupNames);
     return errorMessage;
+}
+
+QString ObjReader::readObj(const QString &pathToFile, Mesh &mesh)
+{        
+    QFile file(pathToFile);
+    if (!file.open(QFile::ReadOnly)) {
+        return "Cannot open the file!";
+    }
+    QTextStream stream(&file);
+    return readObj(stream, mesh);
 }
 
 void ObjReader::parseVertex(const QStringList &chars, QVector3D &outVertex, QString &errorMessage)
@@ -111,7 +112,7 @@ void ObjReader::parseTextureVertex(const QStringList &chars, QVector2D &outTextu
     }
 }
 
-void ObjReader::parseFace(const QStringList &chars, QVector<int> &verticesIndeces, QVector<int> &textureVerticesIndeces, QVector<int> &normalIndeces, QString &errorMessage)
+void ObjReader::parseFace(const QStringList &chars, QVector<int> &verticesIndices, QVector<int> &textureVerticesIndices, QVector<int> &normalIndices, QString &errorMessage)
 {
     if (chars.size() < 4) {
         errorMessage = QString("Invalid amount of coordinates in polygone: ");
@@ -123,24 +124,24 @@ void ObjReader::parseFace(const QStringList &chars, QVector<int> &verticesIndece
             continue;
         if (character.contains('/')) {
             const QStringList blocks = character.split('/');
-            verticesIndeces.append(blocks[0].toInt(&isOk));
+            verticesIndices.append(blocks[0].toInt(&isOk));
             if (!isOk) {
                 errorMessage = QString("Invalid vertex index %1").arg(blocks[0]);
             }
             if (blocks.size() > 1 && !blocks[1].isEmpty()) {
-                textureVerticesIndeces.append(blocks[1].toInt(&isOk));
+                textureVerticesIndices.append(blocks[1].toInt(&isOk));
                 if (!isOk) {
                     errorMessage = QString("Invalid texture vertex index %1").arg(blocks[1]);
                 }
             }
             if (blocks.size() > 2 && !blocks[2].isEmpty()) {
-                normalIndeces.append(blocks[2].toInt(&isOk));
+                normalIndices.append(blocks[2].toInt(&isOk));
                 if (!isOk) {
                     errorMessage = QString("Invalid normal index %1").arg(blocks[2]);
                 }
             }
         } else {
-            verticesIndeces.append(character.toInt(&isOk));
+            verticesIndices.append(character.toInt(&isOk));
             if (!isOk) {
                 errorMessage = QString("Invalid vertex index %1").arg(character);
             }

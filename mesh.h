@@ -12,7 +12,9 @@ namespace MyMesh {
     {
     public:
         Mesh() = default;
-        Mesh(const QVector<QVector3D> &vertices, const QVector<QVector2D> &textureVertices, const QVector<QVector<int>> &faceVerticesIndeces, const QVector<QVector<int>> &textureFaceVerticesIndeces);
+        Mesh(const QVector<QVector3D> &vertices, const QVector<QVector2D> &textureVertices, const QVector<QVector3D> &normals,
+             const QVector<QVector<int>> &faceVerticesIndeces, const QVector<QVector<int>> &textureFaceVerticesIndeces,
+             const QVector<QVector<int>> &m_normalIndeces, const QVector<int> &m_groups, const QVector<QString> &m_groupNames);
 
         const QVector<QVector3D> &getVertices();
         const QVector<QVector2D> &getTextureVertices();
@@ -21,6 +23,7 @@ namespace MyMesh {
         const QVector<QVector<int>> &getGroupIndeces();
         const QVector<QString> &getGroups();
         QVector<QVector3D> calcBoundBox();
+        bool operator==(const Mesh& other) const;
 
     private:
         QVector<QVector3D> m_vertices;
