@@ -3,7 +3,7 @@ CONFIG += OBJREADERTEST_PRI
 
 INCLUDEPATH *= $$clean_path($$PWD/../)
 
-include($$PWD/../ObjReader.pri)
+include($$PWD/ObjReader.pri)
 
 HEADERS += \
 	$$PWD/objreadertest.h \

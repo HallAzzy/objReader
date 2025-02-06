@@ -15,6 +15,6 @@ int main()
     }
     qDebug() << q.isEmpty();*/
 
-    ObjReader::Test::ObjReaderTest test;
-    QTest::qExec(&test);
+    ObjReader::Tests::ObjReaderTest test;
+    return QTest::qExec(&test);
 }

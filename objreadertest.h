@@ -3,7 +3,7 @@
 
 #include <QTest>
 
-namespace ObjReader::Test {
+namespace ObjReader::Tests {
     class ObjReaderTest : public QObject
     {
         Q_OBJECT

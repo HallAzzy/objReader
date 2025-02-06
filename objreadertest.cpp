@@ -1,7 +1,7 @@
 #include "objreadertest.h"
 #include "objreader.h"
 
-namespace ObjReader::Test {
+namespace ObjReader::Tests {
 void ObjReaderTest::testParseVertex_data()
 {
     QTest::addColumn<QVector3D>("coords");
