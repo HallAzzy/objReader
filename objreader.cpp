@@ -21,10 +21,19 @@ QString ObjReader::readObj(QTextStream &stream, Mesh &mesh)
 
     while(!stream.atEnd()) {
         const QString line = stream.readLine();
-        const QStringList parts = line.split(" ");
+        if (line.isEmpty())
+            continue;
+        QStringList parts = line.split(" ", Qt::SkipEmptyParts);
         const QString token = parts[0];
+        parts.pop_front();
         if (token == "#")
             continue;
+        for (int i = 0; i < parts.size(); ++i) {
+            if (parts[i].startsWith("#")) {
+                parts = parts.mid(0, i);
+                break;
+            }
+        }
         if (token == "v") {
             QVector3D vertex;
             parseVertex(parts, vertex, errorMessage);
@@ -63,7 +72,9 @@ QString ObjReader::readObj(QTextStream &stream, Mesh &mesh)
             ++faceIndex;
         }
         if (token == "g") {
-            currentGroup = parts[1];
+            if (parts.isEmpty())
+                return "Invalid group";
+            currentGroup = parts[0];
             groupNames.append(currentGroup);
             hasActiveGroup = true;
         }
@@ -84,67 +95,79 @@ QString ObjReader::readObj(const QString &pathToFile, Mesh &mesh)
 
 void ObjReader::parseVertex(const QStringList &chars, QVector3D &outVertex, QString &errorMessage)
 {
-    if (chars.size() != 4) {
+    if (chars.size() != 3) {
         errorMessage = QString("Invalid amount of coordinates in line: ");
         return;
     }
     bool isOk =  true;
-    for (int i = 1; i < 4; i++) {
-        outVertex[i - 1] = chars[i].toFloat(&isOk);
+    for (int i = 0; i < 3; i++) {
+        outVertex[i] = chars[i].toFloat(&isOk);
         if (!isOk) {
             errorMessage = QString("Invalid vertex coordinate %1: ").arg(chars[i]);
+            return;
         }
     }
 }
 
 void ObjReader::parseTextureVertex(const QStringList &chars, QVector2D &outTextureVertex, QString &errorMessage)
 {
-    if (chars.size() != 3) {
+    if (chars.size() != 2) {
         errorMessage = QString("Invalid amount of coordinates in line: ");
         return;
     }
     bool isOk = true;
-    for (int i = 1; i < 3; i++) {
-        outTextureVertex[i - 1] = chars[i].toFloat(&isOk);
+    for (int i = 0; i < 2; i++) {
+        outTextureVertex[i] = chars[i].toFloat(&isOk);
         if (!isOk) {
             errorMessage = QString("Invalid texture vertex coordinate %1: ").arg(chars[i]);
+            return;
         }
     }
 }
 
 void ObjReader::parseFace(const QStringList &chars, QVector<int> &verticesIndices, QVector<int> &textureVerticesIndices, QVector<int> &normalIndices, QString &errorMessage)
 {
-    if (chars.size() < 4) {
-        errorMessage = QString("Invalid amount of coordinates in polygone: ");
+    if (chars.size() < 3) {
+        errorMessage = QString("Invalid amount of coordinates in polygon: ");
         return;
     }
     bool isOk = true;
     for (const QString &character : chars) {
-        if (character.contains('f'))
-            continue;
         if (character.contains('/')) {
             const QStringList blocks = character.split('/');
             verticesIndices.append(blocks[0].toInt(&isOk));
             if (!isOk) {
                 errorMessage = QString("Invalid vertex index %1").arg(blocks[0]);
+                return;
             }
             if (blocks.size() > 1 && !blocks[1].isEmpty()) {
                 textureVerticesIndices.append(blocks[1].toInt(&isOk));
                 if (!isOk) {
                     errorMessage = QString("Invalid texture vertex index %1").arg(blocks[1]);
+                    return;
                 }
             }
             if (blocks.size() > 2 && !blocks[2].isEmpty()) {
                 normalIndices.append(blocks[2].toInt(&isOk));
                 if (!isOk) {
                     errorMessage = QString("Invalid normal index %1").arg(blocks[2]);
+                    return;
                 }
             }
         } else {
             verticesIndices.append(character.toInt(&isOk));
             if (!isOk) {
                 errorMessage = QString("Invalid vertex index %1").arg(character);
+                return;
             }
         }
+    }
+    if (textureVerticesIndices.size() > 0 && textureVerticesIndices.size() != verticesIndices.size()) {
+        errorMessage = QString("Number of texture vertices does not match the number of vertices");
+        return;
+    }
+    if (normalIndices.size() > 0 && normalIndices.size() != verticesIndices.size()) {
+        errorMessage = QString("Number of normals does not match the number of vertices");
+        return;
     }
 }

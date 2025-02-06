@@ -1,15 +1,20 @@
 #include <QCoreApplication>
 #include "QDebug"
-#include "objreader.h"
 #include "objreadertest.h"
 
 int main()
 {
-    QVector3D vertex;
-    QStringList lst = {"v", "5", "2", "2"};
-    QString error = "Line ";
-    ObjReader::parseVertex(lst, vertex, error);
+    /*QString s = "# a  b c  d # comm";
+    QStringList sl = s.split(" ", Qt::SkipEmptyParts);
+    sl.pop_front();
+    for (int i = 0; i < sl.size(); ++i) {
+        if (sl[i].startsWith("#")) {
+            sl = sl.mid(0, i); // Обрезаем список до текущего элемента
+            break;
+        }
+    }
+    qDebug() << q.isEmpty();*/
 
-    ObjReader::Tests::ObjReaderTest test;
+    ObjReader::Test::ObjReaderTest test;
     QTest::qExec(&test);
 }

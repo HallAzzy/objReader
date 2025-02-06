@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 6.0.1, 2025-02-04T18:30:48. -->
+<!-- Written by QtCreator 6.0.1, 2025-02-05T18:07:00. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -76,7 +76,10 @@
     <value type="Qt::CheckState" key="1@/home/anton/untitled/objreadertest.cpp:testParseFaceVertexTexture">Checked</value>
     <value type="Qt::CheckState" key="1@/home/anton/untitled/objreadertest.cpp:testParseTexture">Checked</value>
     <value type="Qt::CheckState" key="1@/home/anton/untitled/objreadertest.cpp:testParseVertex">Checked</value>
-    <value type="Qt::CheckState" key="1@/home/anton/untitled/objreadertest.h:ObjReader::ObjReaderTest">Checked</value>
+    <value type="Qt::CheckState" key="1@/home/anton/untitled/objreadertest.cpp:testReadFile">Checked</value>
+    <value type="Qt::CheckState" key="1@/home/anton/untitled/objreadertest.cpp:testReadObj">Checked</value>
+    <value type="Qt::CheckState" key="1@/home/anton/untitled/objreadertest.cpp:testReadObjAnother">Checked</value>
+    <value type="Qt::CheckState" key="1@/home/anton/untitled/objreadertest.h:ObjReader::Tests::ObjReaderTest">Checked</value>
    </valuemap>
    <value type="int" key="AutoTest.RunAfterBuild">0</value>
    <value type="bool" key="AutoTest.UseGlobal">true</value>
@@ -92,6 +95,9 @@
     <valuelist type="QVariantList" key="ClangTools.SelectedFiles"/>
     <valuelist type="QVariantList" key="ClangTools.SuppressedDiagnostics"/>
     <value type="bool" key="ClangTools.UseGlobalSettings">true</value>
+   </valuemap>
+   <valuemap type="QVariantMap" key="CppEditor.QuickFix">
+    <value type="bool" key="UseGlobalSettings">true</value>
    </valuemap>
   </valuemap>
  </data>

@@ -3,7 +3,7 @@
 
 #include <QTest>
 
-namespace ObjReader::Test {
+namespace ObjReader::Tests {
     class ObjReaderTest : public QObject
     {
         Q_OBJECT
@@ -12,9 +12,7 @@ namespace ObjReader::Test {
         ObjReaderTest() = default;
 
     private slots:
-        void testParseVertex_data();
         void testParseVertex();
-        void testParseTexture_data();
         void testParseTexture();
         void testParseFaceVertexOnly();
         void testParseFaceVertexTexture();
@@ -22,12 +20,9 @@ namespace ObjReader::Test {
         void testParseFaceFull();
         void testParseAmount();
         void testParseFaceFullAnother();
-        void testParseFaceStructure();
         void testReadObj();
         void testReadObjAnother();
         void testReadFile();
-        void testReadFileWithComms();
-        void testReadFileEmptyGroup();
     };
 }
 

@@ -1,39 +1,69 @@
 #include "mesh.h"
 
 MyMesh::Mesh::Mesh(const QVector<QVector3D> &vertices, const QVector<QVector2D> &textureVertices, const QVector<QVector3D> &normals,
-                   const QVector<QVector<int>> &faceVerticesIndeces, const QVector<QVector<int>> &textureFaceVerticesIndeces,
-                   const QVector<QVector<int>> &normalIndeces, const QVector<int> &groups, const QVector<QString> &groupNames) :
-    m_vertices(vertices), m_textureVertices(textureVertices), m_normals(normals), m_faceVerticesIndeces(faceVerticesIndeces),
-    m_textureFaceVerticesIndeces(textureFaceVerticesIndeces), m_normalIndeces(normalIndeces), m_groups(groups), m_groupNames(groupNames)
+                   const QVector<QVector<int>> &faceVerticesIndices, const QVector<QVector<int>> &textureFaceVerticesIndices,
+                   const QVector<QVector<int>> &normalIndices, const QVector<int> &groups, const QVector<QString> &groupNames)
+
 {
+    assert(!vertices.isEmpty());
+    assert(!faceVerticesIndices.isEmpty());
+
+    for (const QVector<int> &face : faceVerticesIndices) {
+        for (int vertexIndex : face) {
+            assert(vertexIndex > 0 && vertexIndex <= vertices.size());
+        }
+    }
+    if (!textureVertices.isEmpty()) {
+        for (const QVector<int> &textureFace : textureFaceVerticesIndices) {
+            for (int textureIndex : textureFace) {
+                assert(textureIndex > 0 && textureIndex <= textureVertices.size());
+            }
+        }
+    }
+    if (!normals.isEmpty()) {
+        for (const QVector<int> &normalFace : normalIndices) {
+            for (int normalIndex : normalFace) {
+                assert(normalIndex > 0 && normalIndex <= normals.size());
+            }
+        }
+    }
+
+    m_vertices = vertices;
+    m_textureVertices = textureVertices;
+    m_normals = normals;
+    m_faceVerticesIndices = faceVerticesIndices;
+    m_textureFaceVerticesIndices = textureFaceVerticesIndices;
+    m_normalIndices = normalIndices;
+    m_groups = groups;
+    m_groupNames = groupNames;
 }
 
-const QVector<QVector3D> &MyMesh::Mesh::Mesh::getVertices()
+const QVector<QVector3D> &MyMesh::Mesh::Mesh::Vertices()
 {
     return m_vertices;
 }
 
-const QVector<QVector2D> &MyMesh::Mesh::getTextureVertices()
+const QVector<QVector2D> &MyMesh::Mesh::TextureVertices()
 {
     return m_textureVertices;
 }
 
-const QVector<QVector<int>> &MyMesh::Mesh::getFaceVerticesIndeces()
+const QVector<QVector<int>> &MyMesh::Mesh::FaceVerticesIndices()
 {
-    return m_faceVerticesIndeces;
+    return m_faceVerticesIndices;
 }
 
-const QVector<QVector<int>> &MyMesh::Mesh::getTextureFaceVerticesIndeces()
+const QVector<QVector<int>> &MyMesh::Mesh::TextureFaceVerticesIndices()
 {
-    return m_textureFaceVerticesIndeces;
+    return m_textureFaceVerticesIndices;
 }
 
-const QVector<QString> &MyMesh::Mesh::getGroups()
+const QVector<QString> &MyMesh::Mesh::Groups()
 {
     return m_groupNames;
 }
 
-QVector<QVector3D> MyMesh::Mesh::calcBoundBox()
+QVector<QVector3D> MyMesh::Mesh::calcBoundBox() const
 {
     QVector<QVector3D> boundingBox;
 
@@ -71,9 +101,9 @@ bool MyMesh::Mesh::operator==(const Mesh& other) const {
      return (m_vertices == other.m_vertices &&
             m_textureVertices == other.m_textureVertices &&
             m_normals == other.m_normals &&
-            m_faceVerticesIndeces == other.m_faceVerticesIndeces &&
-            m_textureFaceVerticesIndeces == other.m_textureFaceVerticesIndeces &&
-            m_normalIndeces == other.m_normalIndeces &&
+            m_faceVerticesIndices == other.m_faceVerticesIndices &&
+            m_textureFaceVerticesIndices == other.m_textureFaceVerticesIndices &&
+            m_normalIndices == other.m_normalIndices &&
             m_groups == other.m_groups &&
             m_groupNames == other.m_groupNames);
  }
