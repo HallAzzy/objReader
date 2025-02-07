@@ -1,6 +1,6 @@
 #include <QCoreApplication>
 #include "QDebug"
-#include "objreadertest.h"
+#include "unitTests/objreadertest.h"
 
 int main()
 {

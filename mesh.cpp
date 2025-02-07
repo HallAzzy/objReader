@@ -1,10 +1,12 @@
 #include "mesh.h"
 
-MyMesh::Mesh::Mesh(const QVector<QVector3D> &vertices, const QVector<QVector2D> &textureVertices, const QVector<QVector3D> &normals,
-                   const QVector<QVector<int>> &faceVerticesIndices, const QVector<QVector<int>> &textureFaceVerticesIndices,
-                   const QVector<QVector<int>> &normalIndices, const QVector<int> &groups, const QVector<QString> &groupNames)
+MyMesh::Mesh::Mesh(
+        const QVector<QVector3D> &vertices, const QVector<QVector2D> &textureVertices, const QVector<QVector3D> &normals,
+        const QVector<QVector<int>> &faceVerticesIndices, const QVector<QVector<int>> &textureFaceVerticesIndices,
+        const QVector<QVector<int>> &normalIndices, const QVector<int> &groups, const QVector<QString> &groupNames)
 
 {
+    //! REVIEW: assert -> Q_ASSERT
     assert(!vertices.isEmpty());
     assert(!faceVerticesIndices.isEmpty());
 
@@ -38,7 +40,7 @@ MyMesh::Mesh::Mesh(const QVector<QVector3D> &vertices, const QVector<QVector2D> 
     m_groupNames = groupNames;
 }
 
-const QVector<QVector3D> &MyMesh::Mesh::Mesh::Vertices()
+const QVector<QVector3D> &MyMesh::Mesh::Mesh::Vertices() const
 {
     return m_vertices;
 }
@@ -63,6 +65,7 @@ const QVector<QString> &MyMesh::Mesh::Groups()
     return m_groupNames;
 }
 
+//! REVIEW: class BoudingBox
 QVector<QVector3D> MyMesh::Mesh::calcBoundBox() const
 {
     QVector<QVector3D> boundingBox;
@@ -97,8 +100,10 @@ QVector<QVector3D> MyMesh::Mesh::calcBoundBox() const
     return boundingBox;
 }
 
-bool MyMesh::Mesh::operator==(const Mesh& other) const {
-     return (m_vertices == other.m_vertices &&
+bool MyMesh::Mesh::operator==(const Mesh &other) const
+{
+    //! REVIEW: qFuzzyCompare
+    return (m_vertices == other.m_vertices &&
             m_textureVertices == other.m_textureVertices &&
             m_normals == other.m_normals &&
             m_faceVerticesIndices == other.m_faceVerticesIndices &&
@@ -106,4 +111,4 @@ bool MyMesh::Mesh::operator==(const Mesh& other) const {
             m_normalIndices == other.m_normalIndices &&
             m_groups == other.m_groups &&
             m_groupNames == other.m_groupNames);
- }
+}
