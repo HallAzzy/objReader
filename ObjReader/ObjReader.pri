@@ -3,7 +3,7 @@ CONFIG += OBJREADER_PRI
 
 INCLUDEPATH *= $$clean_path($$PWD/../)
 
-icnlude($$PWD/MyMesh.pri)
+include($$PWD/../Mesh/MyMesh.pri)
 
 HEADERS += \
 	$$PWD/objreader.h

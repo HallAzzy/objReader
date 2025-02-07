@@ -3,6 +3,8 @@ CONFIG += MYMESH_PRI
 
 INCLUDEPATH *= $$clean_path($$PWD/../)
 
+include($$PWD/BoundingBox.pri)
+
 HEADERS += \
 	$$PWD/mesh.h
 	

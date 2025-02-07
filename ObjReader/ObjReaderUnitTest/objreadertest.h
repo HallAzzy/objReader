@@ -23,11 +23,14 @@ namespace ObjReader::Test {
         void testParseAmount();
         void testParseFaceFullAnother();
         void testParseFaceStructure();
+        void testParseFaceBrokenStructure();
         void testReadObj();
         void testReadObjAnother();
         void testReadFile();
         void testReadFileWithComms();
         void testReadFileEmptyGroup();
+        void testWrapSameMesh();
+        void testWrapDiffMesh();
     };
 }
 

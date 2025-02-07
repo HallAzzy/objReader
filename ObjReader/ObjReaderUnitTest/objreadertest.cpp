@@ -208,6 +208,17 @@ void ObjReaderTest::testParseFaceStructure()
     QCOMPARE(errorMessage, "Number of texture vertices does not match the number of vertices");
 }
 
+void ObjReaderTest::testParseFaceBrokenStructure()
+{
+    QVector<int> verticesIndeces;
+    QVector<int> textureIndeces;
+    QVector<int> normalIndeces;
+    QString errorMessage;
+
+    parseFace({"1/2/5", "2/2/4/6/3/2", "3/2/3"}, verticesIndeces, textureIndeces, normalIndeces, errorMessage);
+    QCOMPARE(errorMessage, "Invalid amount of vertices indices: ");
+}
+
 void ObjReaderTest::testReadObj()
 {
     QString str = "v 1 2 3\n"
@@ -351,10 +362,34 @@ void ObjReaderTest::testReadFileWithComms()
 void ObjReaderTest::testReadFileEmptyGroup()
 {
     QString filePath = QFINDTESTDATA("modelexp2.obj");
-        MyMesh::Mesh m;
+    MyMesh::Mesh m;
 
-        QString error = readObj(filePath, m);
-        QCOMPARE(error, "Invalid group");
+    QString error = readObj(filePath, m);
+    QCOMPARE(error, "Invalid group");
+}
+
+void ObjReaderTest::testWrapSameMesh()
+{
+    QString filePath = QFINDTESTDATA("Puff.obj");
+    MyMesh::Mesh m;
+    readObj(filePath, m);
+    filePath = QFINDTESTDATA("Puff.obj");
+    MyMesh::Mesh mCMP;
+    readObj(filePath, mCMP);
+    bool same = (m == mCMP);
+    QCOMPARE(same, true);
+}
+
+void ObjReaderTest::testWrapDiffMesh()
+{
+    QString filePath = QFINDTESTDATA("Puff.obj");
+    MyMesh::Mesh m;
+    readObj(filePath, m);
+    filePath = QFINDTESTDATA("Scream.obj");
+    MyMesh::Mesh mCMP;
+    readObj(filePath, mCMP);
+    bool same = (m == mCMP);
+    QCOMPARE(same, false);
 }
 
 } // namespace ObjReader

@@ -135,6 +135,10 @@ void ObjReader::parseFace(const QStringList &chars, QVector<int> &verticesIndice
     for (const QString &character : chars) {
         if (character.contains('/')) {
             const QStringList blocks = character.split('/');
+            if (blocks.size() > 3) {
+                errorMessage = QString("Invalid amount of vertices indices: ");
+                return;
+            }
             verticesIndices.append(blocks[0].toInt(&isOk));
             if (!isOk) {
                 errorMessage = QString("Invalid vertex index %1").arg(blocks[0]);

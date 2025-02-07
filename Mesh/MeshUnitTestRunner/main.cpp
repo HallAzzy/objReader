@@ -1,12 +1,8 @@
 #include <QCoreApplication>
-#include "ObjReaderUnitTest/objreadertest.h"
 #include "MeshUnitTest/meshtest.h"
 
 int main()
 {
-//    ObjReader::Test::ObjReaderTest test;
-//    return QTest::qExec(&test);
-
     MyMesh::Test::MeshTest test;
     return QTest::qExec(&test);
 }
