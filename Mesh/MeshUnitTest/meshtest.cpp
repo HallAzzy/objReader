@@ -105,7 +105,8 @@ void MeshTest::testEmptyFaces()
 */
 void MeshTest::testMeshComparison()
 {
-    MyMesh::Mesh m(
+    MyMesh::Mesh m;
+    m.init(
                 {{0.000000, 1.000000, 0.000000},
                  {-1.000000, -1.000000, 1.000000},
                  {1.000000, -1.000000, 1.000000},
@@ -143,7 +144,8 @@ void MeshTest::testMeshComparison()
 
                 {"pyramid"});
 
-    MyMesh::Mesh mComp(
+    MyMesh::Mesh mComp;
+    mComp.init(
                 {{1.000000, 1.000000, -1.000000},
                  {1.000000, -1.000000, -1.000000},
                  {-1.000000, -1.000000, -1.000000},
@@ -196,7 +198,8 @@ void MeshTest::testMeshComparison()
 
 void MeshTest::testBoundBoxes()
 {
-    MyMesh::Mesh mComp(
+    MyMesh::Mesh actual;
+    actual.init(
                 {{1.000000, 1.000000, -1.000000},
                  {1.000000, -1.000000, -1.000000},
                  {-1.000000, -1.000000, -1.000000},
@@ -243,6 +246,61 @@ void MeshTest::testBoundBoxes()
 
                 {"cube"});
 
-    QCOMPARE(mComp.meshBoundingBox(), BoundingBox({-1, -1, -1}, {1, 1, 1}));
+    QCOMPARE(actual.meshBoundingBox(), BoundingBox({-1, -1, -1}, {1, 1, 1}));
+}
+
+void MeshTest::testCreatingStartsVector()
+{
+    MyMesh::Mesh actual;
+    actual.init(
+                {{1.000000, 1.000000, -1.000000},
+                 {1.000000, -1.000000, -1.000000},
+                 {-1.000000, -1.000000, -1.000000},
+                 {-1.000000, 1.000000, -1.000000},
+                 {1.000000, 1.000000, 1.000000},
+                 {1.000000, -1.000000, 1.000000},
+                 {-1.000000, -1.000000, 1.000000},
+                 {-1.000000, 1.000000, 1.000000}},
+
+                {{0.000000, 0.000000},
+                 {1.000000, 0.000000},
+                 {1.000000, 1.000000},
+                 {0.000000, 1.000000}},
+
+                {{0.000000, 0.000000, -1.000000},
+                 {0.000000, 0.000000, 1.000000},
+                 {1.000000, 0.000000, 0.000000},
+                 {-1.000000, 0.000000, 0.000000},
+                 {0.000000, 1.000000, 0.000000},
+                 {0.000000, -1.000000, 0.000000}},
+
+                {{1, 2, 3, 4},
+                 {5, 6, 7, 8},
+                 {1, 5, 6, 2},
+                 {4, 8, 7, 3},
+                 {1, 4, 8, 5},
+                 {2, 3, 7, 6}},
+
+                {{1, 2, 3, 4},
+                 {1, 2, 3, 4},
+                 {1, 2, 3, 4},
+                 {1, 2, 3, 4},
+                 {1, 2, 3, 4},
+                 {1, 2, 3, 4}},
+
+                {{1, 1, 1, 1},
+                 {2, 2, 2, 2},
+                 {3, 3, 3, 3},
+                 {4, 4, 4, 4},
+                 {5, 5, 5, 5},
+                 {6, 6, 6, 6}},
+
+                {0, 0, 0, 0, 0, 0},
+
+                {"cube"});
+    QVector<int> starts = actual.buildPolygonStartsVector();
+    QVector<int> indices = actual.buildPolygonVertexIndicesVector();
+    QCOMPARE(starts, QVector<int>({0, 4, 8, 12, 16, 20, 24}));
+    QCOMPARE(indices, QVector<int>({1, 2, 3, 4, 5, 6, 7, 8, 1, 5, 6, 2, 4, 8, 7, 3, 1, 4, 8, 5, 2, 3, 7, 6}));
 }
 }

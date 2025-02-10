@@ -4,9 +4,7 @@
 
 int main()
 {
-//    ObjReader::Test::ObjReaderTest test;
-//    return QTest::qExec(&test);
-
-    MyMesh::Test::MeshTest test;
-    return QTest::qExec(&test);
+    ObjReader::Test::ObjReaderTest oTest;
+    MyMesh::Test::MeshTest mTest;
+    return QTest::qExec(&mTest) + QTest::qExec(&oTest);
 }

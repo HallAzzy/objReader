@@ -19,6 +19,7 @@ private slots:
 //    void testEmptyFaces();
     void testMeshComparison();
     void testBoundBoxes();
+    void testCreatingStartsVector();
 };
 }
 #endif // MESHTEST_H

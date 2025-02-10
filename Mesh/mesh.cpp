@@ -1,29 +1,34 @@
 #include "mesh.h"
 
-MyMesh::Mesh::Mesh(
+QString MyMesh::Mesh::init(
         const QVector<QVector3D> &vertices, const QVector<QVector2D> &textureVertices, const QVector<QVector3D> &normals,
         const QVector<QVector<int>> &faceVerticesIndices, const QVector<QVector<int>> &textureFaceVerticesIndices,
         const QVector<QVector<int>> &normalIndices, const QVector<int> &groups, const QVector<QString> &groupNames)
 {
-    Q_ASSERT(!vertices.isEmpty());
-    Q_ASSERT(!faceVerticesIndices.isEmpty());
+    if (vertices.isEmpty())
+        return "Trying to initialize a mesh without vertices";
+    if (faceVerticesIndices.isEmpty())
+        return "Trying to initialize a mesh without polygons";
 
     for (const QVector<int> &face : faceVerticesIndices) {
         for (int vertexIndex : face) {
-            assert(vertexIndex > 0 && vertexIndex <= vertices.size());
+            if (!(vertexIndex > 0 && vertexIndex <= vertices.size()))
+                return "No match for vertex in polygon";
         }
     }
     if (!textureVertices.isEmpty()) {
         for (const QVector<int> &textureFace : textureFaceVerticesIndices) {
             for (int textureIndex : textureFace) {
-                assert(textureIndex > 0 && textureIndex <= textureVertices.size());
+                if (!(textureIndex > 0 && textureIndex <= textureVertices.size()))
+                    return "No match for texture vertex in polygon";
             }
         }
     }
     if (!normals.isEmpty()) {
         for (const QVector<int> &normalFace : normalIndices) {
             for (int normalIndex : normalFace) {
-                assert(normalIndex > 0 && normalIndex <= normals.size());
+                if (!(normalIndex > 0 && normalIndex <= normals.size()))
+                    return "No match for normal in polygon";
             }
         }
     }
@@ -36,6 +41,8 @@ MyMesh::Mesh::Mesh(
     m_groups = groups;
     m_groupNames = groupNames;
     m_meshBoundingBox = BoundingBox::fromVertices(vertices);
+
+    return "";
 }
 
 const QVector<QVector3D> &MyMesh::Mesh::Mesh::vertices() const
@@ -78,20 +85,42 @@ const MyMesh::BoundingBox &MyMesh::Mesh::meshBoundingBox() const
     return m_meshBoundingBox;
 }
 
+QVector<int> MyMesh::Mesh::buildPolygonVertexIndicesVector()
+{
+    QVector<int> indicesVector;
+    for (QVector<int> polygon : m_faceVerticesIndices)
+        for (int vertexId : polygon)
+            indicesVector.append(vertexId);
+    return indicesVector;
+}
+
+QVector<int> MyMesh::Mesh::buildPolygonStartsVector()
+{
+    QVector<int> startsVector;
+    int i = 0;
+    startsVector.append(0);
+    for (QVector<int> polygon : m_faceVerticesIndices)
+    {
+        startsVector.append(polygon.size() + startsVector[i]);
+        ++i;
+    }
+    return startsVector;
+}
+
 bool MyMesh::Mesh::operator==(const Mesh &other) const
 {
     if (
-        m_vertices.size() != other.m_vertices.size() ||
-        m_textureVertices.size() != other.m_textureVertices.size() ||
-        m_normals.size() != other.m_normals.size())
+            m_vertices.size() != other.m_vertices.size() ||
+            m_textureVertices.size() != other.m_textureVertices.size() ||
+            m_normals.size() != other.m_normals.size())
         return false;
     bool vEqual;
     for (int i = 0; i < m_vertices.size(); ++i)
     {
         vEqual = (
-                  qFuzzyCompare(m_vertices[i].x(), other.m_vertices[i].x()) &&
-                  qFuzzyCompare(m_vertices[i].y(), other.m_vertices[i].y()) &&
-                  qFuzzyCompare(m_vertices[i].z(), other.m_vertices[i].z()));
+                    qFuzzyCompare(m_vertices[i].x(), other.m_vertices[i].x()) &&
+                    qFuzzyCompare(m_vertices[i].y(), other.m_vertices[i].y()) &&
+                    qFuzzyCompare(m_vertices[i].z(), other.m_vertices[i].z()));
         if (vEqual == false)
             return false;
     }

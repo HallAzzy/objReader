@@ -10,7 +10,7 @@ class Mesh
 {
 public:
     Mesh() = default;
-    Mesh(
+    QString init(
             const QVector<QVector3D> &vertices, const QVector<QVector2D> &textureVertices, const QVector<QVector3D> &normals,
             const QVector<QVector<int>> &faceVerticesIndices, const QVector<QVector<int>> &textureFaceVerticesIndices,
             const QVector<QVector<int>> &normalIndices, const QVector<int> &groups, const QVector<QString> &groupNames);
@@ -24,6 +24,8 @@ public:
     const QVector<QVector<int>> &groupIndices() const;
     const QVector<QString> &groups() const;
     const BoundingBox &meshBoundingBox() const;
+    QVector<int> buildPolygonVertexIndicesVector();
+    QVector<int> buildPolygonStartsVector();
     bool operator==(const Mesh &other) const;
 
 private:

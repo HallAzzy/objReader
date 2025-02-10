@@ -21,11 +21,11 @@ namespace ObjReader::Test {
         void testParseFaceVertexNormal();
         void testParseFaceFull();
         void testParseAmount();
-        void testParseFaceFullAnother();
+        void testParseFaceFull2();
         void testParseFaceStructure();
         void testParseFaceBrokenStructure();
         void testReadObj();
-        void testReadObjAnother();
+        void testReadObj2();
         void testReadFile();
         void testReadFileWithComms();
         void testReadFileEmptyGroup();
