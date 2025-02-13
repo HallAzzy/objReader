@@ -24,8 +24,10 @@ public:
     const QVector<QVector<int>> &groupIndices() const;
     const QVector<QString> &groups() const;
     const BoundingBox &meshBoundingBox() const;
-    QVector<int> buildPolygonVertexIndicesVector();
-    QVector<int> buildPolygonStartsVector();
+    QVector<int> buildPolygonVertexIndicesVector() const;
+    QVector<int> buildPolygonStartsVector() const;
+    QVector<int> triangulatedVertices() const;
+    QVector<float> toFlat() const;
     bool operator==(const Mesh &other) const;
 
 private:

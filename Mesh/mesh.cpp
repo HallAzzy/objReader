@@ -85,7 +85,7 @@ const MyMesh::BoundingBox &MyMesh::Mesh::meshBoundingBox() const
     return m_meshBoundingBox;
 }
 
-QVector<int> MyMesh::Mesh::buildPolygonVertexIndicesVector()
+QVector<int> MyMesh::Mesh::buildPolygonVertexIndicesVector() const
 {
     QVector<int> indicesVector;
     for (QVector<int> polygon : m_faceVerticesIndices)
@@ -94,7 +94,7 @@ QVector<int> MyMesh::Mesh::buildPolygonVertexIndicesVector()
     return indicesVector;
 }
 
-QVector<int> MyMesh::Mesh::buildPolygonStartsVector()
+QVector<int> MyMesh::Mesh::buildPolygonStartsVector() const
 {
     QVector<int> startsVector;
     int i = 0;
@@ -105,6 +105,32 @@ QVector<int> MyMesh::Mesh::buildPolygonStartsVector()
         ++i;
     }
     return startsVector;
+}
+
+QVector<int> MyMesh::Mesh::triangulatedVertices() const
+{
+    QVector<int> triangles;
+    for (QVector<int> polygon : m_faceVerticesIndices) {
+        int n = polygon.size();
+        for (int i = 1; i < n - 1; ++i) {
+            triangles.append(polygon[0]);
+            triangles.append(polygon[i]);
+            triangles.append(polygon[i + 1]);
+        }
+    }
+    return triangles;
+}
+
+QVector<float> MyMesh::Mesh::toFlat() const
+{
+    QVector<float> triangulatedCoords;
+    QVector<int> triangles = this->triangulatedVertices();
+    for (int index : triangles) {
+        triangulatedCoords.append(m_vertices[index - 1].x());
+        triangulatedCoords.append(m_vertices[index - 1].y());
+        triangulatedCoords.append(m_vertices[index - 1].z());
+    }
+    return triangulatedCoords;
 }
 
 bool MyMesh::Mesh::operator==(const Mesh &other) const
@@ -141,7 +167,7 @@ bool MyMesh::Mesh::operator==(const Mesh &other) const
                         qFuzzyCompare(m_normals[i].x(), other.m_normals[i].x()) &&
                         qFuzzyCompare(m_normals[i].y(), other.m_normals[i].y()) &&
                         qFuzzyCompare(m_normals[i].z(), other.m_normals[i].z()));
-            if (vEqual == false)
+            if (!vEqual)
                 return false;
         }
     }

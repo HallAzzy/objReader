@@ -20,6 +20,8 @@ private slots:
     void testMeshComparison();
     void testBoundBoxes();
     void testCreatingStartsVector();
+    void testTriangulation();
+    void testToFlat();
 };
 }
 #endif // MESHTEST_H
