@@ -3,7 +3,7 @@ CONFIG += GRID_PRI
 
 INCLUDEPATH *= $$clean_path($$PWD/../)
 
-include($$PWD/../DrawableObject/BoundingBox.pri)
+include($$PWD/../DrawableObject/DrawableObject.pri)
 
 HEADERS += \
 	$$PWD/grid.h

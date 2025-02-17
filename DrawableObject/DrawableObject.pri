@@ -6,5 +6,4 @@ INCLUDEPATH *= $$clean_path($$PWD/../)
 HEADERS += \
 	$$PWD/drawableobject.h
 	
-SOURCES += \
 }

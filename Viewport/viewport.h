@@ -6,6 +6,8 @@
 #include <QOpenGLBuffer>
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
+#include "camera.h"
+#include "DrawableObject/drawableobject.h"
 
 namespace Viewport {
 
@@ -13,9 +15,11 @@ class Viewport : public QOpenGLWidget, protected QOpenGLFunctions
 {
     Q_OBJECT
 public:
-    explicit Viewport(QWidget *parent = nullptr);
+    explicit Viewport(QWidget *parent = nullptr, Camera *camera = nullptr);
     ~Viewport();
-    bool addObject(QVector<float> triangleCoords);
+    void addModel(Drawable::DrawableObject *drawableObject);
+    void removeModel(Drawable::DrawableObject *drawableObject);
+    void clearModels();
     Viewport(const Viewport &other) = delete;
     Viewport &operator=(const Viewport &other) = delete;
 
@@ -24,10 +28,13 @@ protected:
     void resizeGL(int w, int h) override;
     void paintGL() override;
 
-    bool createShaderProgram(QString vertexShaderFilePath, QString fragmentShaderFilePath);
-    QOpenGLBuffer *m_vertexBuffer = new QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
-    QOpenGLShaderProgram *m_shader = new QOpenGLShaderProgram();
-    int m_verticesAmount = 0;
+private:
+    QVector<Drawable::DrawableObject *> m_models;
+    Camera *m_camera = nullptr;
+    QQuaternion m_cameraRotation;
+    QColor m_backgroundColor = QColor(170, 170, 180);
+
+    float aspectRatio() const;
 };
 }
 #endif // VIEWPORT_H

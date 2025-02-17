@@ -1,18 +1,21 @@
 #ifndef DRAWABLE_GRID_H
 #define DRAWABLE_GRID_H
 
-#include "DrawableObject/drawableobject.h"
 #include <QColor>
+#include <QOpenGLBuffer>
+#include "DrawableObject/drawableobject.h"
 
 namespace Drawable {
 
 class Grid : public Drawable::DrawableObject
 {
 public:
-    Grid(float size, int nSegments, QColor color);
+    Grid() = default;
+    Grid(double size, int nSegments, QColor color);
+    void draw(QMatrix4x4 viewMatrix, QMatrix4x4 projectionMatrix) override;
 
-protected:
-    float m_size = 1;
+protected:      
+    double m_size = 1.0;
     int m_blockAmount = 10;
     QColor m_color = QColor(0, 255, 0);
 };
