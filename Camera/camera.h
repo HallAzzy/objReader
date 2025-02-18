@@ -23,14 +23,20 @@ public:
     QQuaternion rotation() const;
     QVector3D origin() const;
     QVector3D target() const;
+    static QVector3D unproject(
+            const QMatrix4x4 &projectionMatrix,
+            const QPointF &normScreenPoint, float depth);
+    static QPointF screenPointToNormScreenPoint(
+            const QPoint &screenPoint,
+            const QSize &screenSize);
 
-protected:
+private:
     float m_fovY = 60;
     float m_zNear = 0.01;
     float m_zFar = 1000;
-    QVector3D m_origin = {0, 0, 5};
+    QVector3D m_origin = {0, 0, 140};
     QVector3D m_target = {0, 0, 0};
-    QQuaternion m_rotation = QQuaternion::fromAxisAndAngle(QVector3D(1, 0, 0), -30);
+    QQuaternion m_rotation = QQuaternion::fromAxisAndAngle(QVector3D(1, 0, 0), -15);
 
     QMatrix4x4 cameraToWorldMatrix() const;
     static float degToRad(float degree);

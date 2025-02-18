@@ -22,7 +22,9 @@ public:
     static QVector<float> triangleCoordinatesVector(
             const QVector<int> &triangulatedVertices,
             const QVector<QVector3D> &vertices);
-    
+    static QVector<float> calcNormals(
+            const QVector<int> &triangulatedVertices,
+            const QVector<QVector3D> &vertices);
 private:
     QOpenGLBuffer *m_vertexBuffer = nullptr;
     QOpenGLBuffer *m_normalBuffer = nullptr;

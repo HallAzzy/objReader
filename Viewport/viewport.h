@@ -6,7 +6,7 @@
 #include <QOpenGLBuffer>
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
-#include "camera.h"
+#include "Camera/camera.h"
 #include "DrawableObject/drawableobject.h"
 
 namespace Viewport {
@@ -22,6 +22,14 @@ public:
     void clearModels();
     Viewport(const Viewport &other) = delete;
     Viewport &operator=(const Viewport &other) = delete;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+    void wheelEvent(QWheelEvent *event) override;
+    void zooming(const QPoint &dstPos);
+    void rotation(const QPoint &dstPos);
+    void panning(const QPoint &dstPos);
+    void wheelZooming(float delta);
 
 protected:
     void initializeGL() override;
@@ -29,12 +37,26 @@ protected:
     void paintGL() override;
 
 private:
+    enum class State {
+        None,
+        Pan,
+        Zoom,
+        Rotate
+    };
+
     QVector<Drawable::DrawableObject *> m_models;
     Camera *m_camera = nullptr;
     QQuaternion m_cameraRotation;
     QColor m_backgroundColor = QColor(170, 170, 180);
+    State m_state = State::None;
+    QPoint m_prevPos;
 
     float aspectRatio() const;
+    static QVector3D unprojectScreenPointToEye(
+            const QPoint &pos,
+            float depth,
+            const QMatrix4x4 &projectionMatrix,
+            const QSize &screenSize);
 };
 }
 #endif // VIEWPORT_H

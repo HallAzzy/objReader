@@ -25,19 +25,19 @@ int main(int argc, char *argv[])
     QOpenGLContext *glContext = new QOpenGLContext();
     glContext->setShareContext(globalContext);
     if (!glContext->create())
-        qFatal("Can\'t create OpenGL context");
+        qFatal("Can't create OpenGL context");
     glContext->makeCurrent(surface);
 
     QMainWindow window;
 
     MyMesh::Mesh mesh;
-    ObjReader::readObj("/home/anton/objReader/ObjReader/ObjReaderUnitTest/modelexp.obj", mesh);
+    ObjReader::readObj("/home/anton/objReader/ObjReader/ObjReaderUnitTest/teapot.obj", mesh);
     Drawable::DrawableMesh cube(mesh.triangulatedVertices(), mesh.vertices());
 
 
     Viewport::Camera camera;
     Viewport::Viewport viewport(&window, &camera);
-    Drawable::Grid grid(10, 10, QColor::fromRgb(0, 255, 0));
+    Drawable::Grid grid(100, 10, QColor::fromRgb(0, 255, 0));
     viewport.addModel(&cube);
     viewport.addModel(&grid);
 
