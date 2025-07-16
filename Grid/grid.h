@@ -13,11 +13,15 @@ public:
     Grid() = default;
     Grid(double size, int nSegments, QColor color);
     void draw(QMatrix4x4 viewMatrix, QMatrix4x4 projectionMatrix) override;
+    void setVisible(bool visible);
+    bool isVisible() const;
+    void toggleVisibility();
 
 protected:      
     double m_size = 1.0;
     int m_blockAmount = 10;
     QColor m_color = QColor(0, 255, 0);
+    bool m_isVisible = true;
 };
 
 } // namespace Drawable

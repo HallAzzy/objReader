@@ -128,53 +128,79 @@ void ObjReader::parseTextureVertex(const QStringList &chars, QVector2D &outTextu
     }
 }
 
-void ObjReader::parseFace(const QStringList &chars, QVector<int> &verticesIndices, QVector<int> &textureVerticesIndices, QVector<int> &normalIndices, QString &errorMessage)
+void ObjReader::convertIndices(int elementCount, QVector<QVector<int>>& indices)
 {
-    if (chars.size() < 3) {
-        errorMessage = QString("Invalid amount of coordinates in polygon, line: ");
-        return;
-    }
-    bool isOk = true;
-    for (const QString &character : chars) {
-        if (character.contains('/')) {
-            const QStringList blocks = character.split('/');
-            if (blocks.size() > 3) {
-                errorMessage = QString("Invalid amount of vertices indices, line ");
-                return;
+    for (QVector<int>& faceIndices : indices) {
+        for (int& index : faceIndices) {
+            if (index < 0) {
+                index = elementCount + index;
+            } else {
+                index--;
             }
-            verticesIndices.append(blocks[0].toInt(&isOk));
-            if (!isOk) {
-                errorMessage = QString("Invalid character %1, line ").arg(blocks[0]);
-                return;
-            }
-            if (blocks.size() > 1 && !blocks[1].isEmpty()) {
-                textureVerticesIndices.append(blocks[1].toInt(&isOk));
-                if (!isOk) {
-                    errorMessage = QString("Invalid character %1, line ").arg(blocks[1]);
-                    return;
-                }
-            }
-            if (blocks.size() > 2 && !blocks[2].isEmpty()) {
-                normalIndices.append(blocks[2].toInt(&isOk));
-                if (!isOk) {
-                    errorMessage = QString("Invalid character %1, line ").arg(blocks[2]);
-                    return;
-                }
-            }
-        } else {
-            verticesIndices.append(character.toInt(&isOk));
-            if (!isOk) {
-                errorMessage = QString("Invalid character %1, line ").arg(character);
-                return;
+
+            if (index < 0 || index >= elementCount) {
+                index = 0;
             }
         }
     }
-    if (textureVerticesIndices.size() > 0 && textureVerticesIndices.size() != verticesIndices.size()) {
-        errorMessage = QString("Number of texture vertices does not match the number of vertices, line ");
+}
+
+void ObjReader::parseFace(const QStringList &chars,
+                          QVector<int> &verticesIndices,
+                          QVector<int> &textureVerticesIndices,
+                          QVector<int> &normalIndices,
+                          QString &errorMessage)
+{
+    if (chars.size() < 3) {
+        errorMessage = "Invalid amount of coordinates in polygon, line: ";
         return;
     }
-    if (normalIndices.size() > 0 && normalIndices.size() != verticesIndices.size()) {
-        errorMessage = QString("Number of normals does not match the number of vertices, line ");
+
+    verticesIndices.reserve(chars.size());
+    textureVerticesIndices.reserve(chars.size());
+    normalIndices.reserve(chars.size());
+
+    for (const QString &part : chars) {
+        QStringList blocks = part.split('/', Qt::KeepEmptyParts);
+        if (blocks.size() == 1) {
+            parseIndex(blocks[0], verticesIndices, errorMessage);
+        }
+        else if (blocks.size() == 2) {
+            parseIndex(blocks[0], verticesIndices, errorMessage);
+
+            if (!blocks[1].isEmpty()) {
+                parseIndex(blocks[1], textureVerticesIndices, errorMessage);
+            }
+            else {
+            }
+        }
+        else if (blocks.size() == 3) {
+            parseIndex(blocks[0], verticesIndices, errorMessage);
+
+            if (!blocks[1].isEmpty()) {
+                parseIndex(blocks[1], textureVerticesIndices, errorMessage);
+            }
+
+            parseIndex(blocks[2], normalIndices, errorMessage);
+        }
+        else {
+            errorMessage = "Invalid face format, line: ";
+            return;
+        }
+
+        if (!errorMessage.isEmpty()) return;
+    }
+}
+
+void ObjReader::parseIndex(const QString& str, QVector<int>& container, QString& errorMessage)
+{
+    bool ok;
+    int value = str.toInt(&ok);
+
+    if (!ok) {
+        errorMessage = "Invalid index format '" + str + "', line: ";
         return;
     }
+
+    container.append(value);
 }

@@ -11,12 +11,18 @@ namespace Viewport {
 class Camera
 {
 public:
+
+    enum ProjectionType {
+        Perspective,
+        Orthographic
+    };
+
     Camera();
     QMatrix4x4 viewMatrix() const;
     QMatrix4x4 projectionMatrix(float screenAspectRatio) const;
     void setFov(float fov);
-    void setZNear(float zNear);
-    void setZFar(float zFar);
+    void setClipPlaneNear(float zNear);
+    void setClipPlaneFar(float zFar);
     void setOrigin(const QVector3D &origin);
     void setTarget(const QVector3D &target);
     void setRotation(const QQuaternion &rotation);
@@ -30,13 +36,22 @@ public:
             const QPoint &screenPoint,
             const QSize &screenSize);
 
+    void setProjectionType(ProjectionType type);
+    ProjectionType projectionType() const;
+    void setOrthographicSize(float size);
+    bool isOrthographic() const;
+    bool isPerspective() const;
+
 private:
     float m_fovY = 60;
-    float m_zNear = 0.01;
-    float m_zFar = 1000;
-    QVector3D m_origin = {0, 0, 140};
+    float m_clipPlaneNear = 0.01;
+    float m_clipPlaneFar = 1000;
+    QVector3D m_origin = {0, 0, 150};
     QVector3D m_target = {0, 0, 0};
     QQuaternion m_rotation = QQuaternion::fromAxisAndAngle(QVector3D(1, 0, 0), -15);
+
+    ProjectionType m_projectionType = Perspective;
+    float m_orthographicSize = 100;
 
     QMatrix4x4 cameraToWorldMatrix() const;
     static float degToRad(float degree);

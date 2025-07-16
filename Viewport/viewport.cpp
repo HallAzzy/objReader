@@ -131,6 +131,7 @@ void Viewport::Viewport::panning(const QPoint &dstPos)
     QVector3D dstPos3D = unprojectScreenPointToEye(dstPos, depth, projectionMatrix, size());
     QVector3D shift = dstPos3D - srcPos3D;
     m_camera->setOrigin(m_camera->origin() - shift);
+    m_camera->setTarget(m_camera->target() - shift);
     m_prevPos = dstPos;
     update();
 }

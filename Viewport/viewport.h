@@ -47,7 +47,7 @@ private:
     QVector<Drawable::DrawableObject *> m_models;
     Camera *m_camera = nullptr;
     QQuaternion m_cameraRotation;
-    QColor m_backgroundColor = QColor(170, 170, 180);
+    QColor m_backgroundColor = QColor(100, 100, 100);
     State m_state = State::None;
     QPoint m_prevPos;
 

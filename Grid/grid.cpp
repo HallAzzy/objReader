@@ -9,8 +9,25 @@ Grid::Grid(double size, int blockAmount, QColor color):
 {
 }
 
+void Grid::setVisible(bool visible)
+{
+    m_isVisible = visible;
+}
+
+bool Grid::isVisible() const
+{
+    return m_isVisible;
+}
+
+void Grid::toggleVisibility()
+{
+    m_isVisible = !m_isVisible;
+}
+
 void Grid::draw(QMatrix4x4 viewMatrix, QMatrix4x4 projectionMatrix)
 {
+    if (!m_isVisible) return;
+
     const double blockSize = m_size / m_blockAmount;
     glMatrixMode(GL_MODELVIEW);
     glLoadMatrixf(viewMatrix.data());
@@ -26,4 +43,5 @@ void Grid::draw(QMatrix4x4 viewMatrix, QMatrix4x4 projectionMatrix)
     }
     glEnd();
 }
+
 } // namespace Drawable

@@ -19,14 +19,21 @@ QMatrix4x4 Camera::viewMatrix() const
 
 QMatrix4x4 Camera::projectionMatrix(float screenAspectRatio) const
 {
-    float ySide = m_zNear * tan(degToRad(m_fovY) / 2);
-    float xMax = ySide * screenAspectRatio;
-    float yMax = ySide;
-    float xMin = -xMax;
-    float yMin = -yMax;
     QMatrix4x4 projectionMatrix;
-    projectionMatrix.frustum(xMin, xMax, yMin, yMax, m_zNear, m_zFar);
-    return projectionMatrix;
+
+       if (m_projectionType == Perspective) {
+           float ySide = m_clipPlaneNear * tan(degToRad(m_fovY) / 2);
+           float xMax = ySide * screenAspectRatio;
+           float yMax = ySide;
+           float xMin = -xMax;
+           float yMin = -yMax;
+           projectionMatrix.frustum(xMin, xMax, yMin, yMax, m_clipPlaneNear, m_clipPlaneFar);
+       } else {
+           float halfHeight = m_orthographicSize / 2.0f;
+           float halfWidth = halfHeight * screenAspectRatio;
+           projectionMatrix.ortho(-halfWidth, halfWidth, -halfHeight, halfHeight, m_clipPlaneNear, m_clipPlaneFar);
+       }
+       return projectionMatrix;
 }
 
 void Camera::setFov(float fov)
@@ -34,14 +41,34 @@ void Camera::setFov(float fov)
     m_fovY = fov;
 }
 
-void Camera::setZNear(float zNear)
+void Camera::setClipPlaneNear(float zNear)
 {
-    m_zNear = zNear;
+    m_clipPlaneNear = zNear;
 }
 
-void Camera::setZFar(float zFar)
+Camera::ProjectionType Camera::projectionType() const
 {
-    m_zFar = zFar;
+    return m_projectionType;
+}
+
+bool Camera::isOrthographic() const
+{
+    return m_projectionType == Orthographic;
+}
+
+bool Camera::isPerspective() const
+{
+    return m_projectionType == Perspective;
+}
+
+void Camera::setProjectionType(Camera::ProjectionType type)
+{
+    m_projectionType = type;
+}
+
+void Camera::setClipPlaneFar(float zFar)
+{
+    m_clipPlaneFar = zFar;
 }
 
 void Camera::setOrigin(const QVector3D &origin)
@@ -76,7 +103,11 @@ QVector3D Camera::target() const
 
 QVector3D Camera::unproject(const QMatrix4x4 &projectionMatrix, const QPointF &normScreenPoint, float depth)
 {
-    float zEye = -depth;
+    float zEye;
+    if (projectionMatrix(3, 3) == 0) // ortho
+        zEye = (depth - projectionMatrix(2, 3)) / projectionMatrix(2, 2);
+    else // persp
+        zEye = -depth;
     float w = projectionMatrix(3, 2) * zEye + projectionMatrix(3, 3) * 1;
     const float xClip = normScreenPoint.x() * w;
     const float yClip = normScreenPoint.y() * w;
@@ -106,6 +137,6 @@ QMatrix4x4 Camera::cameraToWorldMatrix() const
 
 float Camera::degToRad(float degree)
 {
-    return degree / 180 * M_PI;
+    return degree / 180.0f * M_PI;
 }
 } // namespace Viewport
